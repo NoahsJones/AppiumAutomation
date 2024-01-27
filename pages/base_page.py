@@ -1,8 +1,11 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from appium.webdriver.common.appiumby import AppiumBy
+from time import sleep
 
 
 class Page:
+    BACK_BUTTON = (AppiumBy.XPATH, "//android.widget.ImageButton[@content-desc='Navigate up']")
 
     def __init__(self, driver):
         self.driver = driver
@@ -11,7 +14,7 @@ class Page:
     def open_url(self, url):
         self.driver.get(url)
 
-    def click(self, *locator):
+    def tap(self, *locator):
         self.driver.find_element(*locator).click()
 
     def find_element(self, *locator):
@@ -26,7 +29,7 @@ class Page:
     def save_screenshot(self, name):
         self.driver.save_screenshot(f'{name}.png')
 
-    def wait_for_element_click(self, *locator):
+    def wait_for_element_tap(self, *locator):
         self.wait.until(
             EC.element_to_be_clickable(locator),
             message=f'Element by {locator} not clickable'
@@ -61,3 +64,6 @@ class Page:
         actual_text = self.find_element(*locator).text
         assert expected_text == actual_text, \
             f"Expected text '{expected_text}' did not match actual '{actual_text}'"
+
+    def go_back(self):
+        self.tap(*self.BACK_BUTTON)
